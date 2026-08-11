@@ -17,18 +17,28 @@ export default function TempleEntrance({ onComplete }: TempleEntranceProps) {
   const [soundPlayed, setSoundPlayed] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem(ENTRANCE_KEY)) {
-      setVisible(false);
-      onComplete();
-      return;
+    try {
+      if (typeof window !== "undefined" && sessionStorage.getItem(ENTRANCE_KEY)) {
+        setVisible(false);
+        return;
+      }
+    } catch {
+      // Ignore storage errors
     }
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    let prefersReducedMotion = false;
+    try {
+      prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+    } catch {
+      // Ignore
+    }
 
     if (prefersReducedMotion) {
-      sessionStorage.setItem(ENTRANCE_KEY, "1");
+      try {
+        sessionStorage.setItem(ENTRANCE_KEY, "1");
+      } catch {}
       setVisible(false);
       onComplete();
       return;
@@ -40,7 +50,9 @@ export default function TempleEntrance({ onComplete }: TempleEntranceProps) {
       setTimeout(() => setPhase("light"), 1800),
       setTimeout(() => {
         setPhase("done");
-        sessionStorage.setItem(ENTRANCE_KEY, "1");
+        try {
+          sessionStorage.setItem(ENTRANCE_KEY, "1");
+        } catch {}
       }, 2600),
       setTimeout(() => {
         setVisible(false);

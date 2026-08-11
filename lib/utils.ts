@@ -6,12 +6,14 @@ export function playTempleBellSound() {
   if (typeof window === "undefined") return;
 
   try {
-    const audioContext = new (
+    const AudioCtx =
       window.AudioContext ||
       (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext
-    )();
+        .webkitAudioContext;
 
+    if (!AudioCtx) return;
+
+    const audioContext = new AudioCtx();
     const frequencies = [523.25, 659.25, 783.99, 1046.5];
     const now = audioContext.currentTime;
 

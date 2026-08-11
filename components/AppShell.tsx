@@ -16,15 +16,21 @@ const ENTRANCE_KEY = "kmj-entrance-seen";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [showEntrance, setShowEntrance] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const seen = sessionStorage.getItem(ENTRANCE_KEY);
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    setIsMounted(true);
+    try {
+      const seen = sessionStorage.getItem(ENTRANCE_KEY);
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
 
-    if (!seen && !reducedMotion) {
-      setShowEntrance(true);
+      if (!seen && !reducedMotion) {
+        setShowEntrance(true);
+      }
+    } catch {
+      // Storage access blocked or restricted
     }
   }, []);
 
@@ -34,7 +40,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider>
-      {showEntrance && (
+      {isMounted && showEntrance && (
         <TempleEntrance onComplete={handleEntranceComplete} />
       )}
       <ClientEffects />
