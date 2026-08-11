@@ -119,24 +119,21 @@ export const GOOGLE_FORM_ENTRIES = {
 export async function submitRegistration(
   data: RegistrationPayload
 ): Promise<{ status: string; message?: string }> {
-  const appsScriptUrl = process.env.NEXT_PUBLIC_APPS_SCRIPT_URL;
+  const appsScriptUrl =
+    process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ||
+    "https://script.google.com/macros/s/AKfycbx3iecBKL4K5i-0cn_5_j9H6iDsfEYnzb3BUzL2RLWPWRReGqZme-b3WU04MP8bxZWJoQ/exec";
 
-  // If Apps Script URL is configured, send JSON POST to Apps Script
-  if (appsScriptUrl && !appsScriptUrl.includes("YOUR_SCRIPT_ID")) {
-    const response = await fetch(appsScriptUrl, {
+  // 1. Post JSON payload to Google Apps Script Web App
+  try {
+    fetch(appsScriptUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    });
+      mode: "no-cors",
+    }).catch(() => {});
+  } catch {}
 
-    if (!response.ok) {
-      throw new Error("Failed to submit registration. Please try again.");
-    }
-
-    return response.json();
-  }
-
-  // Native HTML Form POST submission to Google Form via offscreen iframe
+  // 2. Native HTML Form POST submission to Google Form via offscreen iframe
   if (typeof window !== "undefined") {
     return new Promise((resolve) => {
       const iframeName =
