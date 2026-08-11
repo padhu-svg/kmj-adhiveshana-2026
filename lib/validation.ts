@@ -121,7 +121,7 @@ export async function submitRegistration(
 ): Promise<{ status: string; message?: string }> {
   const appsScriptUrl = process.env.NEXT_PUBLIC_APPS_SCRIPT_URL;
 
-  // If Apps Script URL is set, send JSON POST to Apps Script
+  // If Apps Script URL is configured, send JSON POST to Apps Script
   if (appsScriptUrl && !appsScriptUrl.includes("YOUR_SCRIPT_ID")) {
     const response = await fetch(appsScriptUrl, {
       method: "POST",
@@ -136,29 +136,57 @@ export async function submitRegistration(
     return response.json();
   }
 
-  // Direct submission to Google Form
-  const formUrl =
-    process.env.NEXT_PUBLIC_GOOGLE_FORM_URL ||
-    "https://docs.google.com/forms/d/e/1FAIpQLSdGoX4ITXlvb-7DglWayMQ3TbuXX6FHQlh9CHDrNn8lAMiQ2g/formResponse";
+  // Native HTML Form POST submission to Google Form via hidden iframe
+  if (typeof window !== "undefined") {
+    return new Promise((resolve) => {
+      const iframeName =
+        "hidden_gform_iframe_" + Math.random().toString(36).slice(2);
 
-  const formParams = new URLSearchParams();
-  formParams.append(GOOGLE_FORM_ENTRIES.organization, data.organization);
-  formParams.append(GOOGLE_FORM_ENTRIES.name, data.name);
-  formParams.append(GOOGLE_FORM_ENTRIES.phone, data.phone);
-  formParams.append(GOOGLE_FORM_ENTRIES.email, data.email);
-  formParams.append(GOOGLE_FORM_ENTRIES.address, data.address);
-  formParams.append(GOOGLE_FORM_ENTRIES.pin, data.pin);
-  formParams.append(GOOGLE_FORM_ENTRIES.members, data.members);
-  formParams.append(GOOGLE_FORM_ENTRIES.attendance, data.attendance);
+      const iframe = document.createElement("iframe");
+      iframe.name = iframeName;
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
 
-  await fetch(formUrl, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: formParams.toString(),
-  });
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action =
+        process.env.NEXT_PUBLIC_GOOGLE_FORM_URL ||
+        "https://docs.google.com/forms/d/e/1FAIpQLSdGoX4ITXlvb-7DglWayMQ3TbuXX6FHQlh9CHDrNn8lAMiQ2g/formResponse";
+      form.target = iframeName;
+
+      const fields: Record<string, string> = {
+        [GOOGLE_FORM_ENTRIES.organization]: data.organization,
+        [GOOGLE_FORM_ENTRIES.name]: data.name,
+        [GOOGLE_FORM_ENTRIES.phone]: data.phone,
+        [GOOGLE_FORM_ENTRIES.email]: data.email,
+        [GOOGLE_FORM_ENTRIES.address]: data.address,
+        [GOOGLE_FORM_ENTRIES.pin]: data.pin,
+        [GOOGLE_FORM_ENTRIES.members]: data.members,
+        [GOOGLE_FORM_ENTRIES.attendance]: data.attendance,
+        fvv: "1",
+        pageHistory: "0",
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(() => {
+        try {
+          document.body.removeChild(form);
+          document.body.removeChild(iframe);
+        } catch {}
+        resolve({ status: "success" });
+      }, 1000);
+    });
+  }
 
   return { status: "success" };
 }
