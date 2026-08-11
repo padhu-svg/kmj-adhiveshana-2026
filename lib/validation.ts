@@ -136,15 +136,25 @@ export async function submitRegistration(
     return response.json();
   }
 
-  // Native HTML Form POST submission to Google Form via hidden iframe
+  // Native HTML Form POST submission to Google Form via offscreen iframe
   if (typeof window !== "undefined") {
     return new Promise((resolve) => {
       const iframeName =
         "hidden_gform_iframe_" + Math.random().toString(36).slice(2);
 
+      // Mobile Safari / Chrome suspend POST requests to display:none frames.
+      // Position offscreen instead of display:none.
       const iframe = document.createElement("iframe");
       iframe.name = iframeName;
-      iframe.style.display = "none";
+      iframe.setAttribute("aria-hidden", "true");
+      iframe.style.position = "absolute";
+      iframe.style.width = "1px";
+      iframe.style.height = "1px";
+      iframe.style.top = "-9999px";
+      iframe.style.left = "-9999px";
+      iframe.style.opacity = "0";
+      iframe.style.border = "none";
+      iframe.style.pointerEvents = "none";
       document.body.appendChild(iframe);
 
       const form = document.createElement("form");
@@ -178,13 +188,16 @@ export async function submitRegistration(
       document.body.appendChild(form);
       form.submit();
 
+      // Resolve immediately for smooth UI feedback
+      resolve({ status: "success" });
+
+      // Clean up after allowing mobile network request to finish
       setTimeout(() => {
         try {
-          document.body.removeChild(form);
-          document.body.removeChild(iframe);
+          if (document.body.contains(form)) document.body.removeChild(form);
+          if (document.body.contains(iframe)) document.body.removeChild(iframe);
         } catch {}
-        resolve({ status: "success" });
-      }, 1000);
+      }, 4000);
     });
   }
 
