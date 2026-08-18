@@ -27,14 +27,17 @@ export default function Footer() {
                 sizes="80px"
               />
             </div>
-            <h3 className="font-cinzel font-bold mb-1 text-section-sub" style={{ color: "var(--color-accent)" }}>
+            <h3 className="font-kannada font-extrabold text-lg sm:text-xl mb-1" style={{ color: "var(--color-primary)" }}>
               ಕೂಟ ಮಹಾಜಗತ್ತು
             </h3>
+            <p className="font-cinzel text-xs tracking-wider" style={{ color: "var(--color-accent)" }}>
+              Koota Maha Jagattu
+            </p>
           </div>
 
           <div className="text-center">
-            <h4 className="font-cinzel mb-4 text-section-sub" style={{ color: "var(--color-accent)" }}>
-              Contact
+            <h4 className="font-kannada font-bold mb-4 text-base sm:text-lg" style={{ color: "var(--color-accent)" }}>
+              ಸಂಪರ್ಕ / Contact
             </h4>
             <div className="space-y-3">
               <a
@@ -57,8 +60,8 @@ export default function Footer() {
           </div>
 
           <div className="text-center sm:text-left lg:text-right sm:col-span-2 lg:col-span-1">
-            <h4 className="font-cinzel mb-4 text-section-sub" style={{ color: "var(--color-accent)" }}>
-              Follow Us
+            <h4 className="font-kannada font-bold mb-4 text-base sm:text-lg" style={{ color: "var(--color-accent)" }}>
+              ನಮ್ಮನ್ನು ಅನುಸರಿಸಿ / Follow Us
             </h4>
             <div className="flex items-center justify-center lg:justify-end gap-3 sm:gap-4">
               {[

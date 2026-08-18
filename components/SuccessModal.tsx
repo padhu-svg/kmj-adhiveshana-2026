@@ -60,31 +60,31 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
 
         <h2
           id="success-title"
-          className="font-kannada font-bold mb-2 text-section-title"
+          className="font-kannada font-extrabold mb-2 text-section-title"
           style={{ color: "var(--color-primary)" }}
         >
           ಧನ್ಯವಾದಗಳು
         </h2>
         <p
-          className="font-poppins mb-1 text-section-sub"
+          className="font-kannada font-bold text-base sm:text-lg mb-1"
           style={{ color: "var(--color-text)" }}
         >
-          Your registration has been received.
+          ನಿಮ್ಮ ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ.
         </p>
         <p
-          className="font-kannada text-sm mb-6"
+          className="font-poppins text-xs sm:text-sm mb-6"
           style={{ color: "var(--color-text-muted)" }}
         >
-          ನಿಮ್ಮ ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ.
+          Your registration has been received.
         </p>
 
         <button
           type="button"
           onClick={onClose}
-          className="btn-primary !w-full sm:!w-auto"
+          className="btn-primary font-kannada font-bold !w-full sm:!w-auto"
           autoFocus
         >
-          Close / ಮುಚ್ಚಿ
+          ಮುಚ್ಚಿ / Close
         </button>
       </GoldenBorder>
     </div>

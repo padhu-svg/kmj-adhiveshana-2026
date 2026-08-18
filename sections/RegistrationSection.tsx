@@ -86,19 +86,19 @@ export default function RegistrationSection() {
         <div className="section-container max-w-3xl">
           <div className="text-center mb-8 sm:mb-10" data-aos="fade-up">
             <p
-              className="font-cinzel tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 text-section-sub"
+              className="font-kannada font-bold tracking-wider mb-2 text-section-sub"
               style={{ color: "var(--color-accent)" }}
             >
-              Registration
+              ನೋಂದಣಿ
             </p>
             <h2
-              className="font-kannada font-bold mb-2 text-section-title"
+              className="font-kannada font-extrabold mb-2 text-section-title"
               style={{ color: "var(--color-primary)" }}
             >
               ನೋಂದಣಿ ವಿವರಗಳು
             </h2>
-            <p className="font-poppins text-section-sub" style={{ color: "var(--color-text-muted)" }}>
-              Registration Details
+            <p className="font-poppins text-xs sm:text-sm" style={{ color: "var(--color-text-muted)" }}>
+              Registration Details & Form
             </p>
           </div>
 
@@ -111,8 +111,8 @@ export default function RegistrationSection() {
                 style={{ backgroundColor: "var(--color-card)" }}
               >
                 <div className="bg-maroon-gradient px-4 sm:px-6 py-3 sm:py-4 text-center">
-                  <h3 className="font-cinzel text-white font-semibold tracking-wide text-section-sub">
-                    Registration Details
+                  <h3 className="font-kannada text-white font-bold tracking-wide text-section-sub">
+                    ನೋಂದಣಿ ವಿವರಗಳು / Registration Details
                   </h3>
                 </div>
 
@@ -132,7 +132,7 @@ export default function RegistrationSection() {
                       className={inputClass(!!errors.angasamste)}
                       aria-invalid={!!errors.angasamste}
                     >
-                      <option value="">Select Angasamste...</option>
+                      <option value="">Select Angasamste / ಸ್ಥಳ ಆಯ್ಕೆಮಾಡಿ...</option>
                       {ANGASAMSTE_OPTIONS.map((opt) => (
                         <option key={opt} value={opt}>{opt}</option>
                       ))}
@@ -141,7 +141,7 @@ export default function RegistrationSection() {
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
                     <FormField
-                      label="Name"
+                      label="Full Name"
                       labelKn="ಪೂರ್ಣ ಹೆಸರು"
                       error={errors.fullName?.message}
                       icon={<User size={18} />}
@@ -243,11 +243,11 @@ export default function RegistrationSection() {
 
                   <fieldset>
                     <legend className="mb-1">
-                      <span className="font-poppins text-sm font-medium block" style={{ color: "var(--color-text)" }}>
-                        I wish to attend the Koota Maha Jagattu Kendriya Adhiveshana 2026
-                      </span>
-                      <span className="font-kannada text-xs block mt-0.5" style={{ color: "var(--color-text-muted)" }}>
+                      <span className="font-kannada text-sm sm:text-base font-bold block leading-tight" style={{ color: "var(--color-primary)" }}>
                         ನಾನು ಕೂಟ ಮಹಾ ಜಗತ್ತು ಕೇಂದ್ರ ಅಧಿವೇಶನ 2026ರಲ್ಲಿ ಭಾಗವಹಿಸಲು ಬಯಸುತ್ತೇನೆ
+                      </span>
+                      <span className="font-poppins text-xs block mt-0.5" style={{ color: "var(--color-text-muted)" }}>
+                        I wish to attend the Koota Maha Jagattu Kendriya Adhiveshana 2026
                       </span>
                     </legend>
 
@@ -256,13 +256,13 @@ export default function RegistrationSection() {
                         selected={attendance === "yes"}
                         onClick={() => setValue("attendance", "yes", { shouldValidate: true })}
                         variant="yes"
-                        label="Yes / ಹೌದು"
+                        label="ಹೌದು / Yes"
                       />
                       <AttendanceButton
                         selected={attendance === "no"}
                         onClick={() => setValue("attendance", "no", { shouldValidate: true })}
                         variant="no"
-                        label="No / ಇಲ್ಲ"
+                        label="ಇಲ್ಲ / No"
                       />
                     </div>
                     {errors.attendance && (
@@ -281,17 +281,17 @@ export default function RegistrationSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary w-full disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="btn-primary w-full font-kannada font-bold disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
                         <Loader2 size={20} className="animate-spin" aria-hidden="true" />
-                        Submitting...
+                        ಸಲ್ಲಿಸಲಾಗುತ್ತಿದೆ / Submitting...
                       </>
                     ) : (
                       <>
                         <Send size={20} aria-hidden="true" />
-                        Register / ನೋಂದಣಿ ಮಾಡಿ
+                        ನೋಂದಣಿ ಮಾಡಿ / Register
                       </>
                     )}
                   </button>
@@ -329,11 +329,11 @@ function FormField({
   return (
     <div>
       <label className="block mb-2">
-        <span className="font-poppins text-sm font-medium block" style={{ color: "var(--color-text)" }}>
-          {label}
-        </span>
-        <span className="font-kannada text-xs block mt-0.5" style={{ color: "var(--color-text-muted)" }}>
+        <span className="font-kannada text-sm sm:text-base font-bold block leading-tight" style={{ color: "var(--color-primary)" }}>
           {labelKn}
+        </span>
+        <span className="font-poppins text-xs block mt-0.5" style={{ color: "var(--color-text-muted)" }}>
+          {label}
         </span>
       </label>
       <div className="relative">
@@ -376,7 +376,7 @@ function AttendanceButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "w-full sm:flex-1 flex items-center justify-center gap-2 py-3.5 sm:py-4 px-5 rounded-full border-2 font-poppins font-medium transition-all duration-300",
+        "w-full sm:flex-1 flex items-center justify-center gap-2 py-3.5 sm:py-4 px-5 rounded-full border-2 font-kannada font-bold transition-all duration-300",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold",
         selected
           ? isYes

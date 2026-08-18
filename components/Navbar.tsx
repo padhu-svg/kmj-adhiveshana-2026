@@ -72,10 +72,10 @@ export default function Navbar() {
                   e.preventDefault();
                   handleNavClick(link.href);
                 }}
-                className="px-3 xl:px-4 py-2 font-poppins text-sm transition-colors relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded"
+                className="px-3 xl:px-4 py-2 font-kannada font-bold text-base transition-colors relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded"
                 style={{ color: "var(--color-text)" }}
               >
-                {link.label}
+                {link.labelKn}
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gold group-hover:w-3/4 transition-all duration-300" />
               </a>
             ))}
@@ -86,9 +86,9 @@ export default function Navbar() {
                 e.preventDefault();
                 handleNavClick("#register");
               }}
-              className="ml-2 btn-primary !w-auto !py-2 !px-5 !text-sm"
+              className="ml-2 btn-primary font-kannada font-bold !w-auto !py-2 !px-5 !text-sm"
             >
-              Register
+              ನೋಂದಣಿ / Register
             </a>
           </div>
 
@@ -127,12 +127,12 @@ export default function Navbar() {
                 e.preventDefault();
                 handleNavClick(link.href);
               }}
-              className="block w-full px-4 py-3 font-poppins text-sm rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="block w-full px-4 py-3 font-kannada font-bold text-base rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               style={{ color: "var(--color-text)" }}
             >
-              {link.label}
-              <span className="font-kannada text-xs ml-2 opacity-50">
-                {link.labelKn}
+              {link.labelKn}
+              <span className="font-poppins text-xs ml-2 opacity-60 font-normal">
+                ({link.label})
               </span>
             </a>
           ))}
@@ -142,9 +142,9 @@ export default function Navbar() {
               e.preventDefault();
               handleNavClick("#register");
             }}
-            className="block w-full btn-primary mt-2"
+            className="block w-full btn-primary font-kannada font-bold mt-2"
           >
-            Register / ನೋಂದಣಿ
+            ನೋಂದಣಿ / Register
           </a>
         </div>
       </div>

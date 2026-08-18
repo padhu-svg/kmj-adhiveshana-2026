@@ -65,13 +65,13 @@ export default function HeroSection() {
           {/* Center — Event Title */}
           <div className="order-2 lg:order-2 flex-1 text-center min-w-0 px-2">
             <p
-              className="font-cinzel tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 sm:mb-3 text-section-sub"
+              className="font-kannada font-bold tracking-wider mb-2 sm:mb-3 text-section-sub"
               style={{ color: "var(--color-accent)" }}
             >
-              Koota Maha Jagattu
+              ಕೂಟ ಮಹಾಜಗತ್ತು
             </p>
             <h1
-              className="font-kannada font-bold leading-tight mb-2 text-hero text-balance"
+              className="font-kannada font-extrabold leading-tight mb-2 text-hero text-balance drop-shadow-sm"
               style={{ color: "var(--color-primary)" }}
             >
               ಕೂಟ ಮಹಾಜಗತ್ತು
@@ -82,19 +82,19 @@ export default function HeroSection() {
               className="font-cinzel tracking-wide mb-4 text-section-sub"
               style={{ color: "var(--color-text-muted)" }}
             >
-              Kendriya Adhiveshana 2026
+              Koota Maha Jagattu Kendriya Adhiveshana 2026
             </p>
 
             <TempleDivider className="max-w-xs mx-auto" />
 
             <p
-              className="font-kannada mt-4 mb-1 text-section-sub text-balance"
-              style={{ color: "var(--color-text)" }}
+              className="font-kannada font-bold text-lg sm:text-xl mt-4 mb-1 text-balance"
+              style={{ color: "var(--color-primary)" }}
             >
               {SITE_CONFIG.subtitleKn}
             </p>
             <p
-              className="font-poppins mb-6 sm:mb-8 text-section-sub"
+              className="font-poppins text-xs sm:text-sm mb-6 sm:mb-8"
               style={{ color: "var(--color-text-muted)" }}
             >
               {SITE_CONFIG.subtitleEn}
@@ -103,9 +103,9 @@ export default function HeroSection() {
             <button
               type="button"
               onClick={scrollToRegister}
-              className="btn-primary w-full sm:w-auto"
+              className="btn-primary w-full sm:w-auto font-kannada font-bold"
             >
-              Register Now / ನೋಂದಣಿ ಮಾಡಿ
+              ನೋಂದಣಿ ಮಾಡಿ / Register Now
             </button>
           </div>
 

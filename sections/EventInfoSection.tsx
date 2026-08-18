@@ -13,19 +13,19 @@ export default function EventInfoSection() {
       <div className="section-container">
         <div className="text-center mb-8 sm:mb-12" data-aos="fade-up">
           <p
-            className="font-cinzel tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 text-section-sub"
+            className="font-kannada font-bold tracking-wider mb-2 text-section-sub"
             style={{ color: "var(--color-accent)" }}
           >
-            Event Information
+            ಕಾರ್ಯಕ್ರಮದ ಮಾಹಿತಿ
           </p>
           <h2
-            className="font-kannada font-bold mb-2 text-section-title"
+            className="font-kannada font-extrabold mb-2 text-section-title"
             style={{ color: "var(--color-primary)" }}
           >
-            ಕಾರ್ಯಕ್ರಮದ ಮಾಹಿತಿ
+            ಕಾರ್ಯಕ್ರಮದ ವಿವರಗಳು
           </h2>
-          <p className="font-poppins text-section-sub" style={{ color: "var(--color-text-muted)" }}>
-            Details about the sacred congregation
+          <p className="font-poppins text-xs sm:text-sm" style={{ color: "var(--color-text-muted)" }}>
+            Event Information & Details
           </p>
         </div>
 
@@ -48,7 +48,7 @@ export default function EventInfoSection() {
             <div
               className="mt-4 text-center px-4 py-2 rounded-full glass-card mx-auto w-fit max-w-full"
             >
-              <p className="font-kannada text-sm font-medium" style={{ color: "var(--color-primary)" }}>
+              <p className="font-kannada text-sm font-bold" style={{ color: "var(--color-primary)" }}>
                 ಸಾಲಿಗ್ರಾಮ, ಉಡುಪಿ
               </p>
             </div>
@@ -57,13 +57,13 @@ export default function EventInfoSection() {
           <div className="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="100">
             <InfoCard
               icon={<Calendar className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "var(--color-accent)" }} />}
-              title="Date / ದಿನಾಂಕ"
+              title="ದಿನಾಂಕ / Date"
               content={SITE_CONFIG.event.date}
               contentKn={SITE_CONFIG.event.dateKn}
             />
             <InfoCard
               icon={<MapPin className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "var(--color-accent)" }} />}
-              title="Venue / ಸ್ಥಳ"
+              title="ಸ್ಥಳ / Venue"
               content={SITE_CONFIG.event.venue}
               contentKn={SITE_CONFIG.event.venueKn}
             />
@@ -96,25 +96,25 @@ function InfoCard({
         </div>
         <div className="min-w-0">
           <h3
-            className="font-cinzel font-semibold mb-2 text-section-sub"
+            className="font-kannada font-bold mb-2 text-base sm:text-lg"
             style={{ color: "var(--color-primary)" }}
           >
             {title}
           </h3>
-          <p
-            className="font-poppins leading-relaxed mb-2 text-section-sub"
-            style={{ color: "var(--color-text)" }}
-          >
-            {content}
-          </p>
           {contentKn && (
             <p
-              className="font-kannada leading-relaxed text-section-sub"
-              style={{ color: "var(--color-text-muted)" }}
+              className="font-kannada font-bold leading-relaxed mb-1 text-base sm:text-lg"
+              style={{ color: "var(--color-text)" }}
             >
               {contentKn}
             </p>
           )}
+          <p
+            className="font-poppins text-xs sm:text-sm leading-relaxed"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            {content}
+          </p>
         </div>
       </div>
     </div>
