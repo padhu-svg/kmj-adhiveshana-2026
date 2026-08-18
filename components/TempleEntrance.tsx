@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { playTempleBellSound } from "@/lib/utils";
+import { IMAGES, IMAGE_ALT } from "@/lib/images";
+import GoldenBorder from "@/components/GoldenBorder";
 import { cn } from "@/lib/utils";
 
 const ENTRANCE_KEY = "kmj-entrance-seen";
@@ -12,7 +15,7 @@ interface TempleEntranceProps {
 }
 
 export default function TempleEntrance({ onComplete }: TempleEntranceProps) {
-  const [phase, setPhase] = useState<"dark" | "doors" | "opening" | "light" | "done">("dark");
+  const [phase, setPhase] = useState<"dark" | "doors" | "opening" | "logoShow" | "done">("dark");
   const [visible, setVisible] = useState(true);
   const [soundPlayed, setSoundPlayed] = useState(false);
 
@@ -44,20 +47,27 @@ export default function TempleEntrance({ onComplete }: TempleEntranceProps) {
       return;
     }
 
+    // Sequence:
+    // 0ms: Initial state
+    // 200ms: Doors visible
+    // 600ms: Doors start swinging open
+    // 1600ms: Logo 1 revealed & highlighted for 3.5s (until 5100ms)
+    // 5100ms: Fade transition out
+    // 5600ms: Entrance done, landing page loaded
     const timers = [
-      setTimeout(() => setPhase("doors"), 300),
-      setTimeout(() => setPhase("opening"), 900),
-      setTimeout(() => setPhase("light"), 1800),
+      setTimeout(() => setPhase("doors"), 200),
+      setTimeout(() => setPhase("opening"), 600),
+      setTimeout(() => setPhase("logoShow"), 1600),
       setTimeout(() => {
         setPhase("done");
         try {
           sessionStorage.setItem(ENTRANCE_KEY, "1");
         } catch {}
-      }, 2600),
+      }, 5100),
       setTimeout(() => {
         setVisible(false);
         onComplete();
-      }, 3000),
+      }, 5600),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -80,35 +90,73 @@ export default function TempleEntrance({ onComplete }: TempleEntranceProps) {
         onKeyDown={handleInteraction}
         role="presentation"
         initial={{ opacity: 1 }}
+        animate={{ opacity: phase === "done" ? 0 : 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
       >
+        {/* Dark Temple Atmosphere Background */}
         <div
           className="absolute inset-0 transition-colors duration-700"
           style={{
             backgroundColor:
-              phase === "done" ? "transparent" : "rgba(30, 12, 8, 0.97)",
+              phase === "done" ? "transparent" : "rgba(25, 10, 6, 0.98)",
           }}
         />
 
-        {(phase === "doors" || phase === "opening" || phase === "light") && (
-          <div className="relative w-full max-w-lg px-4 sm:max-w-xl md:max-w-2xl">
+        {/* Central Logo 1 Display — Revealed when doors open and stays for 3.5s */}
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center p-4 pointer-events-none z-10"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{
+            opacity: phase === "logoShow" || phase === "opening" ? 1 : 0,
+            scale: phase === "logoShow" ? 1 : 0.9,
+          }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <div className="relative flex flex-col items-center">
+            {/* Radial Divine Backlight */}
+            <div className="absolute inset-0 bg-gradient-radial from-gold/40 via-saffron/20 to-transparent blur-2xl -z-10 transform scale-150" />
+
+            <GoldenBorder className="p-2 sm:p-3 bg-[var(--color-card)] shadow-temple max-w-[190px] sm:max-w-[230px] w-full">
+              <div className="relative w-full overflow-hidden rounded-sm" style={{ aspectRatio: "252/370" }}>
+                <Image
+                  src={IMAGES.kmjLogo}
+                  alt={IMAGE_ALT.kmjLogo}
+                  fill
+                  className="object-contain"
+                  priority
+                  sizes="(max-width: 640px) 190px, 230px"
+                />
+              </div>
+            </GoldenBorder>
+
+            <motion.div
+              className="mt-4 text-center space-y-1"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{
+                opacity: phase === "logoShow" ? 1 : 0,
+                y: phase === "logoShow" ? 0 : 12,
+              }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <p className="font-kannada font-extrabold text-xl sm:text-2xl text-gold drop-shadow-md">
+                ಕೂಟ ಮಹಾಜಗತ್ತು
+              </p>
+              <p className="font-cinzel text-xs sm:text-sm text-gold-light tracking-widest">
+                Koota Maha Jagattu
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Swinging Temple Doors Frame */}
+        {(phase === "doors" || phase === "opening" || phase === "logoShow") && (
+          <div className="relative w-full max-w-lg px-4 sm:max-w-xl md:max-w-2xl z-20 pointer-events-none">
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-gradient-to-b from-gold/20 to-transparent rounded-full blur-xl opacity-60" aria-hidden="true" />
 
             <div className="relative flex h-[min(60vh,420px)] sm:h-[min(65vh,480px)]" style={{ perspective: "1200px" }}>
-              <TempleDoor side="left" isOpen={phase === "opening" || phase === "light"} />
-              <TempleDoor side="right" isOpen={phase === "opening" || phase === "light"} />
-
-              <motion.div
-                className="absolute inset-0 pointer-events-none"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: phase === "light" || phase === "opening" ? 1 : 0 }}
-                transition={{ duration: 0.8 }}
-                aria-hidden="true"
-              >
-                <div className="absolute inset-0 bg-gradient-radial from-gold/40 via-saffron/20 to-transparent" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gold/30 rounded-full blur-3xl" />
-              </motion.div>
+              <TempleDoor side="left" isOpen={phase === "opening" || phase === "logoShow"} />
+              <TempleDoor side="right" isOpen={phase === "opening" || phase === "logoShow"} />
             </div>
 
             <motion.div
@@ -120,17 +168,6 @@ export default function TempleEntrance({ onComplete }: TempleEntranceProps) {
               <DiyaGlow />
               <DiyaGlow />
             </motion.div>
-
-            {phase === "doors" && (
-              <motion.p
-                className="absolute -bottom-20 left-1/2 -translate-x-1/2 font-cinzel text-gold/60 text-xs tracking-widest whitespace-nowrap"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                Koota Maha Jagattu
-              </motion.p>
-            )}
           </div>
         )}
       </motion.div>
@@ -152,8 +189,8 @@ function TempleDoor({
       className="relative flex-1 origin-center"
       style={{ originX: isLeft ? 0 : 1 }}
       initial={{ rotateY: 0 }}
-      animate={{ rotateY: isOpen ? (isLeft ? -75 : 75) : 0 }}
-      transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
+      animate={{ rotateY: isOpen ? (isLeft ? -85 : 85) : 0 }}
+      transition={{ duration: 1.3, ease: [0.4, 0, 0.2, 1] }}
     >
       <div
         className={cn(
