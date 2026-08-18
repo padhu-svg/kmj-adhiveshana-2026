@@ -1,36 +1,35 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import dynamic from "next/dynamic";
+import { useState, useCallback, useLayoutEffect, useEffect } from "react";
+import TempleEntrance from "@/components/TempleEntrance";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ClientEffects from "@/components/ClientEffects";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-const TempleEntrance = dynamic(
-  () => import("@/components/TempleEntrance"),
-  { ssr: false }
-);
-
 const ENTRANCE_KEY = "kmj-entrance-seen";
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const [showEntrance, setShowEntrance] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  // Default showEntrance to true to cover screen immediately and avoid landing page flash
+  const [showEntrance, setShowEntrance] = useState(true);
+  const [checked, setChecked] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
+  useIsomorphicLayoutEffect(() => {
     try {
       const seen = sessionStorage.getItem(ENTRANCE_KEY);
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
-      if (!seen && !reducedMotion) {
-        setShowEntrance(true);
+      if (seen || reducedMotion) {
+        setShowEntrance(false);
       }
     } catch {
       // Storage access blocked or restricted
+    } finally {
+      setChecked(true);
     }
   }, []);
 
@@ -40,13 +39,22 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider>
-      {isMounted && showEntrance && (
+      {showEntrance && (
         <TempleEntrance onComplete={handleEntranceComplete} />
       )}
-      <ClientEffects />
-      <Navbar />
-      <main>{children}</main>
-      <Footer />
+      <div
+        className="min-h-screen flex flex-col"
+        style={{
+          opacity: !checked && showEntrance ? 0 : 1,
+          visibility: !checked && showEntrance ? "hidden" : "visible",
+          transition: "opacity 0.4s ease-in-out",
+        }}
+      >
+        <ClientEffects />
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
     </ThemeProvider>
   );
 }
