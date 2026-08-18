@@ -27,7 +27,7 @@ import {
 import TempleDivider from "@/components/TempleDivider";
 import GoldenBorder from "@/components/GoldenBorder";
 import SuccessModal from "@/components/SuccessModal";
-import { cn } from "@/lib/utils";
+import { cn, triggerHapticFeedback } from "@/lib/utils";
 
 export default function RegistrationSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -371,17 +371,22 @@ function AttendanceButton({
 }) {
   const isYes = variant === "yes";
 
+  const handleClick = () => {
+    triggerHapticFeedback(variant);
+    onClick();
+  };
+
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={handleClick}
       className={cn(
-        "w-full sm:flex-1 flex items-center justify-center gap-2 py-3.5 sm:py-4 px-5 rounded-full border-2 font-kannada font-bold transition-all duration-300",
+        "w-full sm:flex-1 flex items-center justify-center gap-2 py-3.5 sm:py-4 px-5 rounded-full border-2 font-kannada font-bold transition-all duration-200 active:scale-[0.97]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold",
         selected
           ? isYes
-            ? "border-green-600 bg-green-50 text-green-700"
-            : "border-red-500 bg-red-50 text-red-700"
+            ? "border-green-600 bg-green-50 text-green-700 shadow-sm"
+            : "border-red-500 bg-red-50 text-red-700 shadow-sm"
           : isYes
             ? "border-green-300 text-green-600 hover:bg-green-50/50"
             : "border-red-300 text-red-500 hover:bg-red-50/50"

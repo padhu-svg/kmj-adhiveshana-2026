@@ -73,3 +73,21 @@ export function triggerConfetti() {
     }, 300);
   });
 }
+
+export function triggerHapticFeedback(type: "yes" | "no" | "click" = "click") {
+  if (typeof window === "undefined") return;
+
+  try {
+    if ("vibrate" in navigator && typeof navigator.vibrate === "function") {
+      if (type === "yes") {
+        navigator.vibrate([15, 30, 15]);
+      } else if (type === "no") {
+        navigator.vibrate([25, 40, 25]);
+      } else {
+        navigator.vibrate(12);
+      }
+    }
+  } catch {
+    // Fail silently on unsupported devices
+  }
+}
