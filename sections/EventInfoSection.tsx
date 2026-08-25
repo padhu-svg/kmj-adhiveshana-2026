@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Calendar, MapPin, Heart } from "lucide-react";
+import { Calendar, MapPin, Navigation, ExternalLink } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
 import { IMAGES, IMAGE_ALT } from "@/lib/images";
 import TempleDivider from "@/components/TempleDivider";
 import GoldenBorder from "@/components/GoldenBorder";
+import { triggerHapticFeedback } from "@/lib/utils";
 
 export default function EventInfoSection() {
   return (
@@ -67,6 +68,16 @@ export default function EventInfoSection() {
               content={SITE_CONFIG.event.venue}
               contentKn={SITE_CONFIG.event.venueKn}
             />
+            <InfoCard
+              icon={<Navigation className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "var(--color-accent)" }} />}
+              title="ಗೂಗಲ್ ಮ್ಯಾಪ್ ಮಾರ್ಗಸೂಚಿ / Location & Directions"
+              content="Click below to get step-by-step driving & walking directions to Sanghanikethana, Mannagudda on Google Maps."
+              contentKn="ಸಂಘನಿಕೇತನ, ಪ್ರತಾಪನಗರ, ಮಣ್ಣಗುಡ್ಡೆ ಮಂಗಳೂರು ಸಭಾಂಗಣಕ್ಕೆ ಗೂಗಲ್ ಮ್ಯಾಪ್ ಮುಖಾಂತರ ಸುಲಭ ಮಾರ್ಗಸೂಚಿ ಪಡೆಯಿರಿ."
+              link={{
+                url: SITE_CONFIG.event.mapUrl,
+                label: "ಮಾರ್ಗಸೂಚಿ ಪಡೆಯಿರಿ / Get Directions",
+              }}
+            />
           </div>
         </div>
       </div>
@@ -79,11 +90,13 @@ function InfoCard({
   title,
   content,
   contentKn,
+  link,
 }: {
   icon: React.ReactNode;
   title: string;
   content: string;
   contentKn: string;
+  link?: { url: string; label: string };
 }) {
   return (
     <div className="glass-card rounded-xl p-4 sm:p-6 transition-all duration-300 hover:shadow-glow">
@@ -94,7 +107,7 @@ function InfoCard({
         >
           {icon}
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3
             className="font-kannada font-bold mb-2 text-base sm:text-lg"
             style={{ color: "var(--color-primary)" }}
@@ -115,6 +128,25 @@ function InfoCard({
           >
             {content}
           </p>
+
+          {link && (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => triggerHapticFeedback("click")}
+              className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full font-kannada font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm border"
+              style={{
+                backgroundColor: "rgba(200, 155, 60, 0.12)",
+                color: "var(--color-primary)",
+                borderColor: "var(--color-border)",
+              }}
+            >
+              <Navigation className="w-4 h-4 text-[var(--color-accent)]" />
+              <span>{link.label}</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-70 ml-0.5" />
+            </a>
+          )}
         </div>
       </div>
     </div>
