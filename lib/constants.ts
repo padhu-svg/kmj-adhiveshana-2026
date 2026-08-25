@@ -12,8 +12,7 @@ export const SITE_CONFIG = {
     dateKn: "27 ಸೆಪ್ಟೆಂಬರ್ 2026",
     venue: "Kota Vasudeva Karantha Vedike, Sanghanikethana, Prathapanagara, Mannagudda, Mangaluru.",
     venueKn: "ಕೋಟ ವಾಸುದೇವ ಕಾರಂತ ವೇದಿಕೆ, ಸಂಘನಿಕೇತನ, ಪ್ರತಾಪನಗರ, ಮಣ್ಣಗುಡ್ಡೆ, ಮಂಗಳೂರು.",
-    mapUrl:
-      "https://www.google.com/search?kgmid=%2Fg%2F11gjtzfx9y&hl=en-IN&q=Sanghaniketan%20Hall%20Mangalore&shem=epsd1%2Cltae%2Crimspwouoe&shndl=30&source=sh%2Fx%2Floc%2Fosrp%2Fm5%2F1&kgs=21fb9c180b52e9b4",
+    mapUrl: "https://maps.app.goo.gl/t3rCX9i9gzfzGXRt6",
     importance:
       "The Kendriya Adhiveshana is a sacred congregation where Angasamsthe members from across Karnataka unite in devotion, deliberation, and service — strengthening the bonds of community and spiritual heritage.",
     importanceKn:
