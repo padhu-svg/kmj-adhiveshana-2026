@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -12,11 +14,21 @@ import { cn } from "@/lib/utils";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const scrollY = useScrollPosition();
+  const pathname = usePathname();
   const isScrolled = scrollY > 40;
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (href: string, e: React.MouseEvent) => {
     setIsOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    if (href.includes("#")) {
+      const hash = href.substring(href.indexOf("#"));
+      if (pathname === "/") {
+        e.preventDefault();
+        document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+      }
+    } else if (href === "/" && pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
@@ -36,12 +48,9 @@ export default function Navbar() {
     >
       <div className="section-container">
         <div className="flex items-center justify-between h-14 sm:h-16 lg:h-[4.5rem]">
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#home");
-            }}
+          <Link
+            href="/"
+            onClick={(e) => handleNavClick("/", e)}
             className="flex items-center gap-2 sm:gap-3 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-lg"
           >
             <div className="relative w-9 h-9 sm:w-10 sm:h-10 shrink-0 overflow-hidden border border-[var(--color-border)] rounded-sm">
@@ -61,35 +70,37 @@ export default function Navbar() {
                 Koota Maha Jagattu
               </p>
             </div>
-          </a>
+          </Link>
 
           <div className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(link.href);
-                }}
-                className="px-3 xl:px-4 py-2 font-kannada font-bold text-base transition-colors relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded"
-                style={{ color: "var(--color-text)" }}
+                onClick={(e) => handleNavClick(link.href, e)}
+                className={cn(
+                  "px-3 xl:px-4 py-2 font-kannada font-bold text-base transition-colors relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded",
+                  pathname === link.href && "text-gold"
+                )}
+                style={{ color: pathname === link.href ? "var(--color-accent)" : "var(--color-text)" }}
               >
                 {link.labelKn}
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gold group-hover:w-3/4 transition-all duration-300" />
-              </a>
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gold transition-all duration-300",
+                    pathname === link.href ? "w-3/4" : "w-0 group-hover:w-3/4"
+                  )}
+                />
+              </Link>
             ))}
             <ThemeToggle className="ml-2" />
-            <a
-              href="#register"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick("#register");
-              }}
+            <Link
+              href="/#register"
+              onClick={(e) => handleNavClick("/#register", e)}
               className="ml-2 btn-primary font-kannada font-bold !w-auto !py-2 !px-5 !text-sm"
             >
               ನೋಂದಣಿ / Register
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
@@ -120,32 +131,26 @@ export default function Navbar() {
       >
         <div className="section-container py-3 space-y-1">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick(link.href);
-              }}
+              onClick={(e) => handleNavClick(link.href, e)}
               className="block w-full px-4 py-3 font-kannada font-bold text-base rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-              style={{ color: "var(--color-text)" }}
+              style={{ color: pathname === link.href ? "var(--color-accent)" : "var(--color-text)" }}
             >
               {link.labelKn}
               <span className="font-poppins text-xs ml-2 opacity-60 font-normal">
                 ({link.label})
               </span>
-            </a>
+            </Link>
           ))}
-          <a
-            href="#register"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#register");
-            }}
+          <Link
+            href="/#register"
+            onClick={(e) => handleNavClick("/#register", e)}
             className="block w-full btn-primary font-kannada font-bold mt-2"
           >
             ನೋಂದಣಿ / Register
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

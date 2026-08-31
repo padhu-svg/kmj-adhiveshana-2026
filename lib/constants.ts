@@ -20,18 +20,28 @@ export const SITE_CONFIG = {
   },
   contact: {
     email: "kmjmangalore@gmail.com",
-    phone: "+91 96111 32781",
-  },
-  social: {
-    facebook: "https://facebook.com/kootamahajagattu",
-    instagram: "https://instagram.com/kootamahajagattu",
-    youtube: "https://youtube.com/kootamahajagattu",
+    president: {
+      titleKn: "ಅಧ್ಯಕ್ಷರು",
+      titleEn: "President",
+      phone: "+91 98444 01834",
+    },
+    secretary: {
+      titleKn: "ಕಾರ್ಯದರ್ಶಿ",
+      titleEn: "Secretary",
+      phone: "+91 99009 72917",
+    },
+    committee: {
+      titleKn: "ಸಂಘಟನಾ ಸಮಿತಿ ಸದಸ್ಯರು",
+      titleEn: "Organizing Committee Members",
+      phones: ["+91 96111 32781", "+91 78923 91964"],
+    },
   },
 } as const;
 
 export const NAV_LINKS = [
-  { href: "#home", label: "Home", labelKn: "ಮುಖಪುಟ" },
-  { href: "#about", label: "About", labelKn: "ಬಗ್ಗೆ" },
-  { href: "#register", label: "Register", labelKn: "ನೋಂದಣಿ" },
-  { href: "#contact", label: "Contact", labelKn: "ಸಂಪರ್ಕ" },
+  { href: "/", label: "Home", labelKn: "ಮುಖಪುಟ" },
+  { href: "/invitation", label: "Invitation", labelKn: "ಆಮಂತ್ರಣ" },
+  { href: "/#about", label: "About", labelKn: "ಬಗ್ಗೆ" },
+  { href: "/#register", label: "Register", labelKn: "ನೋಂದಣಿ" },
+  { href: "/#contact", label: "Contact", labelKn: "ಸಂಪರ್ಕ" },
 ] as const;

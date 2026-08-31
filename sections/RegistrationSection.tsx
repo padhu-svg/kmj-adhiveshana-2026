@@ -224,7 +224,7 @@ export default function RegistrationSection() {
 
                     <FormField
                       label="Number of Family Members Attending"
-                      labelKn="ಭಾಗವಹಿಸುವ ಕುಟುಂಬ ಸದಸ್ಯರ ಸಂಖ್ಯೆ"
+                      labelKn="ಭಾಗವಹಿಸುವ ಮನೆಯ ಸದಸ್ಯರ ಸಂಖ್ಯೆ"
                       error={errors.familyMembers?.message}
                       icon={<Users size={18} />}
                     >
