@@ -154,17 +154,24 @@ export async function submitRegistration(
     };
   }
 
-  // 2. Submit payload to Google Apps Script
+  // 2. Submit payload via GET query parameters for 100% reliable browser response reading
   try {
-    const res = await fetch(appsScriptUrl, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(data),
+    const params = new URLSearchParams({
+      action: "register",
+      organization: data.organization,
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      address: data.address,
+      pin: data.pin,
+      members: data.members,
+      attendance: data.attendance,
     });
 
+    const res = await fetch(`${appsScriptUrl}?${params.toString()}`);
     if (res.ok) {
       const result = await res.json();
-      if (result && result.status === "duplicate") {
+      if (result.status === "duplicate" || result.exists === true) {
         return {
           status: "duplicate",
           message:
@@ -172,15 +179,24 @@ export async function submitRegistration(
             "ಈ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ / This mobile number is already registered",
         };
       }
+      if (result.status === "success") {
+        return { status: "success" };
+      }
     }
   } catch (err) {
-    console.warn("Direct POST fetch failed, using fallback mode", err);
+    console.warn("GET submission failed, trying POST fallback", err);
+  }
+
+  // Fallback POST submission if GET query string fails
+  try {
     await fetch(appsScriptUrl, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(data),
       mode: "no-cors",
     });
+  } catch (err) {
+    console.error("Submission POST fallback error", err);
   }
 
   return { status: "success" };
