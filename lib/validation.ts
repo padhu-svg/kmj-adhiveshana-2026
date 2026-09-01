@@ -116,12 +116,43 @@ export const GOOGLE_FORM_ENTRIES = {
   attendance: "entry.1062314949",
 } as const;
 
+export async function checkMobileExists(phone: string): Promise<boolean> {
+  const cleanPhone = phone.replace(/\D/g, "").trim();
+  if (cleanPhone.length !== 10) return false;
+
+  const appsScriptUrl =
+    process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ||
+    "https://script.google.com/macros/s/AKfycbx3iecBKL4K5i-0cn_5_j9H6iDsfEYnzb3BUzL2RLWPWRReGqZme-b3WU04MP8bxZWJoQ/exec";
+
+  try {
+    const res = await fetch(`${appsScriptUrl}?phone=${encodeURIComponent(cleanPhone)}`);
+    if (res.ok) {
+      const data = await res.json();
+      return data.exists === true;
+    }
+  } catch (err) {
+    console.warn("Mobile check failed:", err);
+  }
+
+  return false;
+}
+
 export async function submitRegistration(
   data: RegistrationPayload
 ): Promise<{ status: "success" | "duplicate" | "error"; message?: string }> {
   const appsScriptUrl =
     process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ||
     "https://script.google.com/macros/s/AKfycbx3iecBKL4K5i-0cn_5_j9H6iDsfEYnzb3BUzL2RLWPWRReGqZme-b3WU04MP8bxZWJoQ/exec";
+
+  // Pre-check if mobile number already exists in Google Sheet
+  const exists = await checkMobileExists(data.phone);
+  if (exists) {
+    return {
+      status: "duplicate",
+      message:
+        "ಈ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ / This mobile number is already registered",
+    };
+  }
 
   try {
     const res = await fetch(appsScriptUrl, {

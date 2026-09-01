@@ -21,6 +21,7 @@ import {
   type RegistrationFormData,
   mapFormToPayload,
   submitRegistration,
+  checkMobileExists,
   ANGASAMSTE_OPTIONS,
   FAMILY_MEMBER_OPTIONS,
 } from "@/lib/validation";
@@ -172,7 +173,21 @@ export default function RegistrationSection() {
                       <input
                         type="tel"
                         inputMode="numeric"
-                        {...register("mobileNumber")}
+                        {...register("mobileNumber", {
+                          onBlur: async (e) => {
+                            const val = e.target.value;
+                            if (/^[6-9]\d{9}$/.test(val)) {
+                              const exists = await checkMobileExists(val);
+                              if (exists) {
+                                setError("mobileNumber", {
+                                  type: "manual",
+                                  message:
+                                    "ಈ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ / This mobile number is already registered",
+                                });
+                              }
+                            }
+                          },
+                        })}
                         placeholder="10-digit mobile number"
                         maxLength={10}
                         className={inputClass(!!errors.mobileNumber)}
