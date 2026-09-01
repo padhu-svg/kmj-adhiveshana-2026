@@ -118,18 +118,39 @@ export const GOOGLE_FORM_ENTRIES = {
 
 export async function submitRegistration(
   data: RegistrationPayload
-): Promise<{ status: string; message?: string }> {
+): Promise<{ status: "success" | "duplicate" | "error"; message?: string }> {
   const appsScriptUrl =
     process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ||
     "https://script.google.com/macros/s/AKfycbx3iecBKL4K5i-0cn_5_j9H6iDsfEYnzb3BUzL2RLWPWRReGqZme-b3WU04MP8bxZWJoQ/exec";
 
-  // Post JSON payload directly to Google Apps Script Web App endpoint
-  await fetch(appsScriptUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-    mode: "no-cors",
-  });
+  try {
+    const res = await fetch(appsScriptUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      const result = await res.json();
+      if (result && result.status === "duplicate") {
+        return {
+          status: "duplicate",
+          message:
+            result.message ||
+            "ಈ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ / This mobile number is already registered",
+        };
+      }
+      return { status: "success" };
+    }
+  } catch (err) {
+    console.warn("Fetch response read failed, using no-cors fallback", err);
+    await fetch(appsScriptUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data),
+      mode: "no-cors",
+    });
+  }
 
   return { status: "success" };
 }

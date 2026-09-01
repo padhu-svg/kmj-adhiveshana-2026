@@ -39,6 +39,7 @@ export default function RegistrationSection() {
     handleSubmit,
     watch,
     setValue,
+    setError,
     reset,
     formState: { errors },
   } = useForm<RegistrationFormData>({
@@ -68,6 +69,13 @@ export default function RegistrationSection() {
       if (result.status === "success") {
         setShowSuccess(true);
         reset();
+      } else if (result.status === "duplicate") {
+        setError("mobileNumber", {
+          type: "manual",
+          message:
+            "ಈ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ / This mobile number is already registered",
+        });
+        triggerHapticFeedback("no");
       } else {
         setSubmitError("Registration failed. Please try again.");
       }
