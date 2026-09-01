@@ -144,9 +144,9 @@ export async function submitRegistration(
     process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ||
     "https://script.google.com/macros/s/AKfycbx3iecBKL4K5i-0cn_5_j9H6iDsfEYnzb3BUzL2RLWPWRReGqZme-b3WU04MP8bxZWJoQ/exec";
 
-  // Pre-check if mobile number already exists in Google Sheet
-  const exists = await checkMobileExists(data.phone);
-  if (exists) {
+  // 1. Pre-check if mobile number already exists in Google Sheet
+  const existsBefore = await checkMobileExists(data.phone);
+  if (existsBefore) {
     return {
       status: "duplicate",
       message:
@@ -154,6 +154,7 @@ export async function submitRegistration(
     };
   }
 
+  // 2. Submit payload to Google Apps Script
   try {
     const res = await fetch(appsScriptUrl, {
       method: "POST",
@@ -171,10 +172,9 @@ export async function submitRegistration(
             "ಈ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲ್ಪಟ್ಟಿದೆ / This mobile number is already registered",
         };
       }
-      return { status: "success" };
     }
   } catch (err) {
-    console.warn("Fetch response read failed, using no-cors fallback", err);
+    console.warn("Direct POST fetch failed, using fallback mode", err);
     await fetch(appsScriptUrl, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
