@@ -24,6 +24,7 @@ export const ANGASAMSTE_OPTIONS = [
   "Mangalore / ಮಂಗಳೂರು",
   "Mangalpady / ಮಂಗಲ್ಪಾಡಿ",
   "Miyapadavu / ಮಿಯಾಪಾಡವು",
+  "Moodabidri / ಮೂಡುಬಿದಿರೆ",
   "Mumbai / ಮುಂಬೈ",
   "Mysore / ಮೈಸೂರು",
   "Polali / ಪೊಳಲಿ",
